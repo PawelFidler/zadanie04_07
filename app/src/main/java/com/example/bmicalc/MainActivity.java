@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +20,10 @@ public class MainActivity<view> extends AppCompatActivity {
     private RadioButton plecRadioK;
     private RadioButton plecRadioM;
     private Button submitButton;
+    private TextView wynikText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        listeners();
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -30,27 +31,25 @@ public class MainActivity<view> extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
-
         });
+
         wagaInput = findViewById(R.id.editTextNumberDecimal);
         wzrostInput = findViewById(R.id.editTextNumberDecimal2);
         plecRadioK = findViewById(R.id.radioButton);
         plecRadioM = findViewById(R.id.radioButton2);
         submitButton = findViewById(R.id.button);
+        wynikText = findViewById(R.id.wynik);
+
+
+        submitButton.setOnClickListener(v -> {
+            int wynik = validateForm();
+            if(wynik == 1){
+                wyswietl();
+            }else{
+                blad(wynik);
+            }
+        });
     }
-
-
-   private void listeners(){
-       submitButton.setOnClickListener(v -> {
-           int wynik = validateForm();
-           if(wynik == 1){
-               wyswietl();
-           }else{
-               blad(wynik);
-           }
-       });
-   }
     private int validateForm(){
        if(wagaInput.getText().toString().trim().isEmpty()){
            return 2;
@@ -58,7 +57,7 @@ public class MainActivity<view> extends AppCompatActivity {
            return 3;
        }else if(wzrostInput.getText().toString().trim().isEmpty()){
            return 4;
-       }else if(Integer.parseInt(String.valueOf(wagaInput.getText()))>300){
+       }else if(Integer.parseInt(String.valueOf(wzrostInput.getText()))>300){
            return 5;
        }else if(!plecRadioK.isChecked() && !plecRadioM.isChecked()){
            return 6;
@@ -66,5 +65,18 @@ public class MainActivity<view> extends AppCompatActivity {
            return 1;
        }
     }
+    private void wyswietl(){
+        int waga = Integer.parseInt(String.valueOf(wagaInput.getText()));
+        int wzrost = Integer.parseInt(String.valueOf(wzrostInput.getText()));
+        int BMI=waga/((wzrost/100)^2);
+        wynikText.setText("Twoje BMI to: "+ BMI);
+    }
+    private void blad(int err){
+        int waga = Integer.parseInt(String.valueOf(wagaInput.getText()));
+        int wzrost = Integer.parseInt(String.valueOf(wzrostInput.getText()));
+        int BMI=waga/(wzrost^2);
+        wynikText.setText("err"+ BMI + err);
+    }
+
 
 }
