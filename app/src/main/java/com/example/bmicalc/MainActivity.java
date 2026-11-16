@@ -53,29 +53,33 @@ public class MainActivity<view> extends AppCompatActivity {
     private int validateForm(){
        if(wagaInput.getText().toString().trim().isEmpty()){
            return 2;
-       }else if(wagaInput.getText().toString().trim().isEmpty()){
-           return 3;
        }else if(wzrostInput.getText().toString().trim().isEmpty()){
-           return 4;
+           return 3;
        }else if(Integer.parseInt(String.valueOf(wzrostInput.getText()))>300){
-           return 5;
+           return 4;
        }else if(!plecRadioK.isChecked() && !plecRadioM.isChecked()){
-           return 6;
+           return 5;
        }else{
            return 1;
        }
     }
     private void wyswietl(){
-        int waga = Integer.parseInt(String.valueOf(wagaInput.getText()));
-        int wzrost = Integer.parseInt(String.valueOf(wzrostInput.getText()));
-        int BMI=waga/((wzrost/100)^2);
+        double waga = Double.parseDouble(String.valueOf(wagaInput.getText()));
+        double wzrost = Double.parseDouble(String.valueOf(wzrostInput.getText()));
+        double BMI=waga/((wzrost/100)*(wzrost/100));
+        BMI = Math.round(BMI);
         wynikText.setText("Twoje BMI to: "+ BMI);
     }
     private void blad(int err){
-        int waga = Integer.parseInt(String.valueOf(wagaInput.getText()));
-        int wzrost = Integer.parseInt(String.valueOf(wzrostInput.getText()));
-        int BMI=waga/(wzrost^2);
-        wynikText.setText("err"+ BMI + err);
+        if(err == 2){
+            wynikText.setText("waga nie może być pusta");
+        }else if(err == 3){
+            wynikText.setText("wzrost nie może być pusty");
+        }else if(err == 4){
+            wynikText.setText("wzrost nie może być powyżej 300");
+        }else if(err == 5){
+            wynikText.setText("plec nie moze być pusta");
+        }
     }
 
 
